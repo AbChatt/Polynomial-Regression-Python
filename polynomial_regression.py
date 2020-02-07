@@ -6,14 +6,14 @@ B. Chan, S. Wei, D. Fleet
 
  COMPLETE THIS TEXT BOX:
 
- Student Name:
- Student number:
- UtorID:
+ Student Name: Abhishek Chatterjee
+ Student number: 1004820615
+ UtorID: chatt114
 
  I hereby certify that the work contained here is my own
 
 
- ____________________
+  Abhishek Chatterjee
  (sign with your name)
 
 ===========================================================
@@ -66,7 +66,14 @@ class PolynomialRegression:
         
         # ====================================================
         # TODO: Implement your solution within the box
-        
+
+        # need to create a Vandermonde matrix in order to multiply arrays together to create final polynomial
+
+        B = np.vander(X.flatten(), self.K+1, True)
+        y = np.matmul(B, self.parameters)
+
+        return y
+
         # ====================================================
 
     def fit(self, train_X, train_Y):
@@ -90,6 +97,11 @@ class PolynomialRegression:
         # ====================================================
         # TODO: Implement your solution within the box
         
+        B = np.vander(train_X.flatten(), self.K+1, True)
+        p1 = np.linalg.inv(np.matmul(B.T, B))
+        p2 = np.matmul(B.T, train_Y)
+
+        self.parameters = np.matmul(p1, p2)
         # ====================================================
 
         assert self.parameters.shape == (self.K + 1, 1)
@@ -115,6 +127,13 @@ class PolynomialRegression:
         # ====================================================
         # TODO: Implement your solution within the box
         
+        B = np.vander(train_X.flatten(), self.K+1, True)
+        p1 = np.matmul(B.T, B)
+        p2 = np.linalg.inv(p1 + l2_coef * np.identity(self.K+1))
+        p3 = np.matmul(B.T, train_Y)
+
+        self.parameters = np.matmul(p2, p3)
+
         # ====================================================
 
         assert self.parameters.shape == (self.K + 1, 1)
